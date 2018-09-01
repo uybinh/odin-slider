@@ -1,28 +1,37 @@
 function init() {
   let ul = document.querySelector("#image-slider")
   let liItems = ul.children
+  let dots = document.querySelector("#image-slider-indicators").children
   imageNumber = liItems.length
   imageWidth = liItems[0].children[0].offsetWidth
   ul.style.width = imageNumber * imageWidth + "px"
 
   function animate(opts) {
     let start = new Date()
-    let id = setInterval(() => {
-      let timePassed = new Date() - start
-      let position = parseInt(timePassed / opts.duration)
+    let currentPosition = 1
+    let lastPosition = 0
+    ul.style.left = `0`
+    dots[0].style.color = "red"
+
+    let loop = setInterval(() => {
+      lastPosition = currentPosition
+      currentPosition += 1
 
       // Reset count
-      if (position + 1 > imageNumber) {
-        clearInterval(id)
+      if (currentPosition > imageNumber) {
+        clearInterval(loop)
+        currentPosition = 1
         animate(opts)
       }
 
-      ul.style.left = `-${imageWidth * (position - 1)}px`
+      dots[lastPosition - 1].style.color = "black"
+      dots[currentPosition - 1].style.color = "red"
+      ul.style.left = `-${imageWidth * (currentPosition - 1)}px`
     }, opts.duration)
   }
 
   animate({
-    duration: 5000
+    duration: 2000
   })
 }
 
