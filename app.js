@@ -1,10 +1,28 @@
 function init() {
   let ul = document.querySelector("#image-slider")
   let liItems = ul.children
-  let dots = document.querySelector("#image-slider-indicators").children
+
   imageNumber = liItems.length
   imageWidth = liItems[0].children[0].offsetWidth
   ul.style.width = imageNumber * imageWidth + "px"
+
+  // Create indicator dots
+  let indicators = document.createElement("ul")
+  indicators.id = "slider-indicators"
+  ul.parentElement.appendChild(indicators)
+  const dot = document.createElement("li")
+  dot.classList.add("slider-indicator")
+  for (let i = 0; i < imageNumber; i++) {
+    let newdot = dot.cloneNode()
+    indicators.appendChild(newdot)
+  }
+
+  let dots = document.querySelectorAll(".slider-indicator")
+  dots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      ul.style.left = `-${imageWidth * index}px`
+    })
+  })
 
   function animate(opts) {
     let start = new Date()
@@ -24,14 +42,14 @@ function init() {
         animate(opts)
       }
 
-      dots[lastPosition - 1].style.color = "black"
+      dots[lastPosition - 1].style.color = "white"
       dots[currentPosition - 1].style.color = "red"
       ul.style.left = `-${imageWidth * (currentPosition - 1)}px`
     }, opts.duration)
   }
 
   animate({
-    duration: 2000
+    duration: 5000
   })
 }
 
